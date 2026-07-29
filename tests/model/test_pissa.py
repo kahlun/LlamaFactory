@@ -50,6 +50,7 @@ INFER_ARGS = {
 
 
 @pytest.mark.xfail(reason="PiSSA initialization is not stable in different platform.")
+@pytest.mark.runs_on(["cpu", "mps", "xpu"])  # PeftModel.from_pretrained hangs on XPU (PEFT+XPU incompatibility)
 def test_pissa_train():
     model = load_train_model(**TRAIN_ARGS)
     ref_model = load_reference_model(TINY_LLAMA_PISSA, TINY_LLAMA_PISSA, use_pissa=True, is_trainable=True)
@@ -57,6 +58,7 @@ def test_pissa_train():
 
 
 @pytest.mark.xfail(reason="Known connection error.")
+@pytest.mark.runs_on(["cpu", "mps", "xpu"])  # PeftModel.from_pretrained hangs on XPU (PEFT+XPU incompatibility)
 def test_pissa_inference():
     model = load_infer_model(**INFER_ARGS)
     ref_model = load_reference_model(TINY_LLAMA_PISSA, TINY_LLAMA_PISSA, use_pissa=True, is_trainable=False)

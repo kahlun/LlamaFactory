@@ -40,6 +40,7 @@ INFER_ARGS = {
 
 
 @pytest.mark.xfail(is_transformers_version_greater_than("4.48"), reason="Attention refactor.")
+@pytest.mark.runs_on(["cpu", "mps", "xpu"])
 def test_attention():
     attention_available = ["disabled"]
     if is_torch_sdpa_available():

@@ -73,12 +73,14 @@ def test_lora_train_extra_modules():
     assert extra_modules == {"embed_tokens", "lm_head"}
 
 
+@pytest.mark.runs_on(["cpu", "mps", "xpu"])  # PeftModel.from_pretrained hangs on XPU (PEFT+XPU incompatibility)
 def test_lora_train_old_adapters():
     model = load_train_model(adapter_name_or_path=TINY_LLAMA_ADAPTER, create_new_adapter=False, **TRAIN_ARGS)
     ref_model = load_reference_model(TINY_LLAMA3, TINY_LLAMA_ADAPTER, use_lora=True, is_trainable=True)
     compare_model(model, ref_model)
 
 
+@pytest.mark.runs_on(["cpu", "mps", "xpu"])  # PeftModel.from_pretrained hangs on XPU (PEFT+XPU incompatibility)
 def test_lora_train_new_adapters():
     model = load_train_model(adapter_name_or_path=TINY_LLAMA_ADAPTER, create_new_adapter=True, **TRAIN_ARGS)
     ref_model = load_reference_model(TINY_LLAMA3, TINY_LLAMA_ADAPTER, use_lora=True, is_trainable=True)
@@ -97,6 +99,7 @@ def test_lora_train_valuehead():
     assert torch.allclose(state_dict["v_head.summary.bias"], ref_state_dict["v_head.summary.bias"])
 
 
+@pytest.mark.runs_on(["cpu", "mps", "xpu"])  # PeftModel.from_pretrained + merge_and_unload hangs on XPU (PEFT+XPU incompatibility)
 def test_lora_inference():
     model = load_infer_model(**INFER_ARGS)
     ref_model = load_reference_model(TINY_LLAMA3, TINY_LLAMA_ADAPTER, use_lora=True).merge_and_unload()

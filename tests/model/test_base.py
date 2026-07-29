@@ -37,6 +37,7 @@ def test_base():
 
 
 @pytest.mark.usefixtures("fix_valuehead_cpu_loading")
+@pytest.mark.runs_on(["cpu", "mps", "xpu"])
 def test_valuehead():
     model = load_infer_model(add_valuehead=True, **INFER_ARGS)
     ref_model = load_reference_model(TINY_LLAMA_VALUEHEAD, add_valuehead=True)
